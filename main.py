@@ -31,7 +31,7 @@ def main():
         print("- {}: {}".format(key, args.__dict__[key]))
     print("#" * 60)
 
-    # n_fur_states_training=int(args.n_positive / args.positive_ratio
+    # n_fur_states_training=int(args.n_positive / args.positive_ratio)
     model = GiWModel(cur_image_shape=args.cur_shape, fur_image_shape=args.fur_shape,
                      n_fur_states_training=args.n_fur_states)
     # optionally resume from a checkpoint
@@ -81,10 +81,10 @@ def main():
             # evaluate on validation set
             mse = validate(val_loader, model, criterion, epoch, args)
             # remember validation best mse and save checkpoint
-            is_best = mse > best_mse
-            best_mse = max(mse, best_mse)
+            is_best = mse < best_mse
+            best_mse = min(mse, best_mse)
             print("Best mse: {:.4f}".format(best_mse))
-            if is_best or args.save_checkpoint_freq:
+            if is_best or epoch % args.save_checkpoint_freq == 0:
                 save_checkpoint({
                     'epoch': epoch + 1,
                     'state_dict': model.state_dict(),
@@ -124,6 +124,7 @@ def train(loader, model, criterion, optimizer, epoch, config):
         n_pred_images = model(cur_state, n_fur_states)
 
         loss = criterion(n_pred_images, n_label_images)
+        loss = torch.sum(loss)
 
         forward_time.update(time.time() - end)
         end = time.time()
