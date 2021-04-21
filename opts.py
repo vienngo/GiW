@@ -24,8 +24,6 @@ parser.add_argument('--wd', '--weight-decay', default=1e-4, type=float,
                     dest='weight_decay')
 parser.add_argument('-j', '--workers', default=32, type=int, metavar='N',
                     help='number of data loading workers (default: 32)')
-parser.add_argument('--mlp', action='store_true',
-                    help='use mlp head')
 parser.add_argument('--clip-gradient', '--gd', default=None, type=float,
                     metavar='W', help='gradient norm clipping (default: disabled)')
 parser.add_argument('-i', '--iter-size', default=1, type=int,
@@ -37,7 +35,6 @@ parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
 parser.add_argument('--warmup-epoch', default=None, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--save-checkpoint-freq', default=20, type=int, metavar='N', help='tensorboard log frequency')
-parser.add_argument('--snapshot_pref', type=str, default="")
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
 parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true',
@@ -62,6 +59,7 @@ parser.add_argument('--multiprocessing-distributed', action='store_true',
                          'N processes per node, which has N GPUs. This is the '
                          'fastest way to use PyTorch for either single node or '
                          'multi node data parallel training')
+parser.add_argument('--distributed', action='store_false')
 
 # ========================= Monitor Configs ==========================
 parser.add_argument('--eval-freq', '-ef', default=1, type=int, metavar='N', help='evaluation frequency (default: 1)')

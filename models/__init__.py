@@ -1,1 +1,1 @@
-from GiW import GiWModel
+from .GiW import GiWModel

@@ -44,7 +44,7 @@ class GiWModel(nn.Module):
                 conv1x1(128, 64),
                 nn.BatchNorm2d(64),
             )),
-            nn.Conv2d(64, 1, 1, stride=1, padding=1)
+            nn.Conv2d(64, 1, 1, stride=1, padding=0)
         )
 
     def forward(self, cur_input, fur_inputs):
@@ -55,14 +55,18 @@ class GiWModel(nn.Module):
         fur_n_states = self.fur_state_encoder(fur_inputs.view(-1, cf, hf, wf))
 
         _, codes_c, codes_h, codes_w = fur_n_states.size()
-        cur_states = cur_states.unsqueeze(1).repeat_interleave(self.n_fur_states, dim=1)
-        fur_n_states = fur_n_states.view(-1, self.n_fur_states, codes_c, codes_h, codes_w)
+        cur_states = cur_states.unsqueeze(1).repeat_interleave(self.n_fur_states_training, dim=1)
+        fur_n_states = fur_n_states.view(-1, self.n_fur_states_training, codes_c, codes_h, codes_w)
         cat_states = torch.cat([cur_states, fur_n_states], dim=2)
 
         fur_n_rewards = self.action_estimator(cat_states.view(-1, 2 * codes_c, codes_h, codes_w))
-        fur_n_rewards = fur_n_rewards.view((-1, self.n_fur_states) + fur_n_rewards.size()[-2:])
+        fur_n_rewards = fur_n_rewards.view((-1, self.n_fur_states_training) + fur_n_rewards.size()[-2:])
 
         return fur_n_rewards
+
+    def load_w(self, checkpoint_path):
+        checkpoint = torch.load(checkpoint_path)
+        self.load_state_dict(checkpoint['state_dict'])
 
 
 if __name__ == "__main__":

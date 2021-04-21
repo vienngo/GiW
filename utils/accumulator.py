@@ -33,7 +33,7 @@ class ProgressMeter(object):
         self.prefix = prefix
 
     def display(self, batch):
-        entries = [self.prefix + self.batch_format_str.format(batch)]
+        entries = [self.prefix + self.batch_format_str.format(batch)]   # batch / num_batches
         entries += [str(meter) for meter in self.meters]
         print('\t'.join(entries))
 

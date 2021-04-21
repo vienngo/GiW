@@ -64,7 +64,7 @@ class GiWDataset(Dataset):
         if self.sampling:
             # sampling positive and negative fur_states
             yt_values = np.load(record.yt)
-            yt_sorted_idx = np.argsort(yt_values)[::-1]
+            yt_sorted_idx = np.argsort(yt_values)[::-1]     # from large to small
             positive_idx = yt_sorted_idx[:self.n_positive]
             negative_idx = np.random.choice(yt_sorted_idx[self.n_positive:], self.n_negative)
             selected_idx = np.hstack(positive_idx, negative_idx)

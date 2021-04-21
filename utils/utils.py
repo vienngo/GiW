@@ -54,6 +54,7 @@ def prepare_for_training(config):
         # Only occurs when experiment started the same minute
         shutil.rmtree(config.save_dir)
 
+    # mkdir ./output first if not existed
     os.mkdir(config.save_dir)
     os.mkdir(config.checkpoint_dir)
     os.mkdir(config.log_dir)
